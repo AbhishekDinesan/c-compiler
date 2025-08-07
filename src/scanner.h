@@ -3,16 +3,14 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
 
 class Scanner {
 private:
-    std::string input;
-    int position;
-    
+    std::stringstream input;
 public:
     Scanner(const std::string& text);
-    std::string nextToken();
-    bool hasMoreTokens();
+    void scanInput();
 };
 
 #endif

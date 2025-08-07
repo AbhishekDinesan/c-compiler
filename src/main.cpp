@@ -1,6 +1,7 @@
 #include "scanner.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
@@ -8,11 +9,8 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     std::ifstream file(argv[1]);
-    std::string source_code((std::istreambuf_iterator<char>(file)),
-                            std::istreambuf_iterator<char>());
+    std::string source_code("int main(int a, int b) { return 241; }");
     Scanner scanner(source_code);
-    while (scanner.hasMoreTokens()) {
-        std::cout << scanner.nextToken() << std::endl;
-    }
+    scanner.scanInput();
     return 0;
 }
