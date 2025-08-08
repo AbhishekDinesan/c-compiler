@@ -5,8 +5,6 @@
 #include <set>
 #include <map>
 
-Scanner::Scanner(const std::string& text): input(text){} // cpp initializes stringstream implicitly
-
 std::string readFile(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
@@ -16,22 +14,12 @@ std::string readFile(const std::string& filename) {
     std::stringstream file_buffer;
     file_buffer << file.rdbuf();
     file.close();
-    
     return file_buffer.str();
 }
 
-std::string dfa = readFile("language.dfa");
-
-const std::string ALPHABET    = ".ALPHABET";
-const std::string STATES      = ".STATES";
-const std::string TRANSITIONS = ".TRANSITIONS";
-const std::string INPUT       = ".INPUT";
-const std::string EMPTY       = ".EMPTY";
-std::set <char> alphabet = {};
-std::set <std::string> states = {};
-std::set <std::string> accepting_states = {};
-std::string initialState;
-std::map<std::pair<std::string, char>, std::string> transactions; // move this stuff inside the class definition
+Scanner::Scanner(const std::string& text): input(text), transitions(), accepting_states(), states(){
+  dfa = readFile("language.dfa");
+} 
 
 bool isChar(std::string s) {
   return s.length() == 1;
@@ -40,8 +28,10 @@ bool isRange(std::string s) {
   return s.length() == 3 && s[1] == '-';
 }
 
-void dfa_builder(std::stringstream &stream) {
-    std::cout << stream.str() << std::endl;
+void Scanner::dfaBuilder(std::stringstream &stream) {
+  const std::string STATES      = ".STATES";
+  const std::string TRANSITIONS = ".TRANSITIONS";
+  std::string initialState;
   std::istream& in = stream;
   std::string s;
   while(in >> s) {
@@ -93,16 +83,31 @@ void dfa_builder(std::stringstream &stream) {
         }
       }
       for ( char c : symbols ) {
-        transactions.insert({{fromState, c}, toState});
+        transitions.insert({{fromState, c}, toState});
       }
 }
 }
 
+void maximal_munch(){
+  /*
+  while there is input:
+  // check if theres a transition
+    //if there is a transition, do it
+    // if it's accepting, then output the tokens
 
-void Scanner::scanInput(){
-    std::stringstream dfastream(dfa); // make me a part of the scanner upon initilizaiton
-    dfa_builder(dfastream);
-    for (const auto& entry: transactions){ // rename me
+  // if the transition is in an accept
+
+
+  */
+
+
+}
+
+
+std::stringstream Scanner::scanInput(){
+    std::stringstream dfastream(dfa);
+    dfaBuilder(dfastream);
+    for (const auto& entry: transitions){ 
         const auto &key = entry.first;
         const auto &value = entry.second;
         const auto &from = key.first;
@@ -112,5 +117,6 @@ void Scanner::scanInput(){
     for (const auto& entry: states){
         std::cout << "i" << entry << std::endl;
     }
+    return dfastream;
 };
 

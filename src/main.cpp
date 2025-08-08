@@ -11,6 +11,6 @@ int main(int argc, char* argv[]) {
     std::ifstream file(argv[1]);
     std::string source_code("int main(int a, int b) { return 241; }");
     Scanner scanner(source_code);
-    scanner.scanInput();
+    std::stringstream input = scanner.scanInput();
     return 0;
 }
